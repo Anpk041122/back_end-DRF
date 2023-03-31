@@ -5,11 +5,7 @@ from ckeditor.fields import RichTextField
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-<<<<<<< Updated upstream
-    active = models.BooleanField(default=True)
-=======
     is_active = models.BooleanField(default=True)
->>>>>>> Stashed changes
     
     class Meta:
         abstract = True
@@ -21,11 +17,8 @@ class User(BaseModel):
     password = models.CharField(max_length=20)
     role = models.CharField(max_length=10)
     is_admin = models.BooleanField(default=False)
-<<<<<<< Updated upstream
-=======
     first_name = models.CharField(max_length=100, default='')
     last_name = models.CharField(max_length=100, default='')
->>>>>>> Stashed changes
 
     def is_staff(self):
         return self.is_admin
@@ -67,10 +60,7 @@ class Patient(BaseModel):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
-<<<<<<< Updated upstream
-=======
     descrip = models.CharField(max_length=100, default='')
->>>>>>> Stashed changes
 
     def __str__(self):
         return self.category_name

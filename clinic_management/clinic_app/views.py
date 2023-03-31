@@ -1,6 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from .views.CategoryView import CategoryView 
 from .serializers import CategorySerializer, MedicineSerializer, UserSerializer
 from .models import Category, Medicine, User
 from rest_framework import ( 
@@ -62,4 +59,3 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-#test git
