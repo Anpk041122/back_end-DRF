@@ -1,12 +1,6 @@
-<<<<<<< Updated upstream
 from django.shortcuts import render
 from django.http import HttpResponse
 from .views.CategoryView import CategoryView 
-# Create your views here.
-
-def index(request): 
-    return HttpResponse("e-Course App")
-=======
 from .serializers import CategorySerializer, MedicineSerializer, UserSerializer
 from .models import Category, Medicine, User
 from rest_framework import ( 
@@ -68,4 +62,4 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
->>>>>>> Stashed changes
+#test git
