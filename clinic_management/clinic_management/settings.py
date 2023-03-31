@@ -38,21 +38,70 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinic_app.apps.ClinicAppConfig',
+<<<<<<< Updated upstream
     'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
+=======
+    'oauth2_provider',
+    'rest_framework',
+    'ckeditor',
+    'ckeditor_uploader',
+    'drf_yasg',
+>>>>>>> Stashed changes
 ]
 
 MEDIA_ROOT = '%s/clinic_app/static/' % BASE_DIR
 
 CKEDITOR_UPLOAD_PATH = "ckeditors/clinic"
 
+<<<<<<< Updated upstream
+=======
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+#     ),
+    # 'DEFAULT_RENDERER_CLASSES': [
+    #     'rest_framework.renderers.JSONRenderer',
+    #     'rest_framework.renderers.BrowsableAPIRenderer',
+    # ],
+    # 'DEFAULT_PARSER_CLASSES': [
+    #     'rest_framework.parsers.JSONParser',
+    # ],
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ],
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '100/day',
+    #     'user': '1000/day',
+    #     'categories': '10/hour',
+    # },
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
+# }   
+
+>>>>>>> Stashed changes
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     )
+<<<<<<< Updated upstream
 }   
+=======
+}
+
+# OAUTH2_PROVIDER = {
+#     'ACCESS_TOKEN_EXPIRE_SECONDS': 36000,
+#     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
+#     'SCOPES': {
+#         'read': 'Read scope',
+#         'write': 'Write scope',
+#     }
+# }
+>>>>>>> Stashed changes
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,3 +188,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+<<<<<<< Updated upstream
+=======
+CLIENT_ID = '7KVAC6SE9ecpoCuZj7b3IqlLoxtgw7E6SsS3FqYP'
+CLIENT_SECRET = '3VNbxsTXG6HWlcgc2XeY5JZRs2uYE2XhySvPlCGCU2swFqVt9Bq8fqZSGvXFrDHrY1aMqF48G7TXjdJI3upzNTEKErgh7LkUp4dxK9bFzFIQl9bWvBMnqXFyxXJA06zV'
+>>>>>>> Stashed changes
