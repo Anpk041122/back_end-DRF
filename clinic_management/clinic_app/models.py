@@ -36,6 +36,8 @@ class Employee(BaseModel):
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=200)
     avatar = models.ImageField(upload_to='static/%S', null=True)
+    date_of_birth = models.DateField()
+    gender = models.CharField(max_length=10)
     specialization = models.CharField(max_length=100)
     experience = models.CharField(max_length=100)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
@@ -68,7 +70,7 @@ class Category(models.Model):
 class Medicine(BaseModel):
     medicine_name = models.CharField(max_length=100)
     manufacturer = models.CharField(max_length=100)
-    descrip = RichTextField()
+    description = RichTextField()
     unit_price = models.DecimalField(max_digits=7, decimal_places=2)
     image = models.ImageField(upload_to='static/%S', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -91,16 +93,13 @@ class OrderDetail(models.Model):
     quantity = models.IntegerField()
     dosage = models.CharField(max_length=100)
     instructions = models.TextField()
+    payment_method = models.CharField(max_length=100, default='')
+    total_money = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
     class Meta:
         indexes = [
             models.Index(fields=['order'])
         ]
-
-class Payment(models.Model):
-    order_detail = models.ForeignKey(OrderDetail, on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=100)
-    total_money = models.DecimalField(max_digits=7, decimal_places=2)
 
 class Appointment(BaseModel):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
