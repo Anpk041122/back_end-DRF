@@ -5,11 +5,7 @@ from ckeditor.fields import RichTextField
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-<<<<<<< Updated upstream
-    active = models.BooleanField(default=True)
-=======
     is_active = models.BooleanField(default=True)
->>>>>>> Stashed changes
     
     class Meta:
         abstract = True
@@ -21,21 +17,10 @@ class User(BaseModel):
     password = models.CharField(max_length=20)
     role = models.CharField(max_length=10)
     is_admin = models.BooleanField(default=False)
-<<<<<<< Updated upstream
-=======
-    first_name = models.CharField(max_length=100, default='')
-    last_name = models.CharField(max_length=100, default='')
->>>>>>> Stashed changes
-
-    def is_staff(self):
-        return self.is_admin
     
 class Position(models.Model):
     position_name = models.CharField(max_length=100)
     description = models.TextField()
-
-    def __str__(self):
-        return self.position_name
 
 class Employee(BaseModel):
     employee_name = models.CharField(max_length=100)
@@ -43,13 +28,13 @@ class Employee(BaseModel):
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=200)
     avatar = models.ImageField(upload_to='static/%S', null=True)
+    date_of_birth = models.DateField()
+    gender = models.CharField(max_length=10)
     specialization = models.CharField(max_length=100)
     experience = models.CharField(max_length=100)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"Name {self.employee_name} Position {self.position.position_name}"
 
 class Patient(BaseModel):
     patient_name = models.CharField(max_length=100)
@@ -62,29 +47,18 @@ class Patient(BaseModel):
     medical_history = RichTextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.patient_name
-
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
-<<<<<<< Updated upstream
-=======
-    descrip = models.CharField(max_length=100, default='')
->>>>>>> Stashed changes
-
-    def __str__(self):
-        return self.category_name
-
+    description = models.TextField(blank=True, null=True)
+    
 class Medicine(BaseModel):
     medicine_name = models.CharField(max_length=100)
     manufacturer = models.CharField(max_length=100)
-    descrip = RichTextField()
+    description = models.TextField()
     unit_price = models.DecimalField(max_digits=7, decimal_places=2)
     image = models.ImageField(upload_to='static/%S', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.product_name
 
 class Order(BaseModel):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -92,8 +66,6 @@ class Order(BaseModel):
     medicines = models.ManyToManyField(Medicine, through='OrderDetail')
 
 
-    def __str__(self):
-        return f"{self.patient} - {self.doctor} - {self.date} - {self.time}"
 
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -101,16 +73,13 @@ class OrderDetail(models.Model):
     quantity = models.IntegerField()
     dosage = models.CharField(max_length=100)
     instructions = models.TextField()
+    payment_method = models.CharField(max_length=100, default='')
+    total_money = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
     class Meta:
         indexes = [
             models.Index(fields=['order'])
         ]
-
-class Payment(models.Model):
-    order_detail = models.ForeignKey(OrderDetail, on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=100)
-    total_money = models.DecimalField(max_digits=7, decimal_places=2)
 
 class Appointment(BaseModel):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -120,16 +89,11 @@ class Appointment(BaseModel):
     shift = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
 
-    def __str__(self):
-        return f"{self.patient} - {self.doctor} - {self.date} - {self.time} - {self.shift}"
 
 class Schedule(BaseModel):
     weekday = models.CharField(max_length=100)
     date = models.DateField()
     employees = models.ManyToManyField(Employee, through='ScheduleDetail')
-
-    def __str__(self):
-        return f"{self.weekday} - {self.date}"
 
 class ScheduleDetail(models.Model):
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)

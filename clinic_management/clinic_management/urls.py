@@ -16,19 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-<<<<<<< Updated upstream
-urlpatterns = [
-    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    path('', include('clinic_app.urls')),
-    path('admin/', admin.site.urls),
-=======
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Course API",
+        title="Clinic API",
         default_version='v1',
         description="APIs for CourseApp",
         contact=openapi.Contact(email="phaman.ky0411@gmail.com"),
@@ -45,5 +39,4 @@ urlpatterns = [
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('o/', include('oauth2_provider.urls' , namespace='oauth2_provider')),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
->>>>>>> Stashed changes
 ]

@@ -38,25 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinic_app.apps.ClinicAppConfig',
-<<<<<<< Updated upstream
-    'rest_framework',
-    'ckeditor',
-    'ckeditor_uploader',
-=======
     'oauth2_provider',
     'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
     'drf_yasg',
->>>>>>> Stashed changes
 ]
 
 MEDIA_ROOT = '%s/clinic_app/static/' % BASE_DIR
 
 CKEDITOR_UPLOAD_PATH = "ckeditors/clinic"
 
-<<<<<<< Updated upstream
-=======
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
 #         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
@@ -82,15 +74,11 @@ CKEDITOR_UPLOAD_PATH = "ckeditors/clinic"
     # ],
 # }   
 
->>>>>>> Stashed changes
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     )
-<<<<<<< Updated upstream
-}   
-=======
 }
 
 # OAUTH2_PROVIDER = {
@@ -101,7 +89,6 @@ REST_FRAMEWORK = {
 #         'write': 'Write scope',
 #     }
 # }
->>>>>>> Stashed changes
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -188,8 +175,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-<<<<<<< Updated upstream
-=======
 CLIENT_ID = '7KVAC6SE9ecpoCuZj7b3IqlLoxtgw7E6SsS3FqYP'
 CLIENT_SECRET = '3VNbxsTXG6HWlcgc2XeY5JZRs2uYE2XhySvPlCGCU2swFqVt9Bq8fqZSGvXFrDHrY1aMqF48G7TXjdJI3upzNTEKErgh7LkUp4dxK9bFzFIQl9bWvBMnqXFyxXJA06zV'
->>>>>>> Stashed changes
