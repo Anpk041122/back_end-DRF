@@ -1,5 +1,5 @@
-from .serializers import CategorySerializer, MedicineSerializer, UserSerializer
-from .models import Category, Medicine, User
+from .serializers import CategorySerializer, MedicineSerializer, UserSerializer, MedicalHistorySerializer
+from .models import Category, Medicine, User, MedicalHistory
 from rest_framework import ( 
     viewsets, generics, filters
     )
@@ -101,10 +101,9 @@ class MedicineViewSet(viewsets.ViewSet , generics.ListAPIView):
 
         return queryset
 
-
 # get all use by admin
 class CategoryViewSet(viewsets.ModelViewSet):
-    renderer_classes = [JSONRenderer]   
+    renderer_classes = [JSONRenderer]       
     parser_classes = [MultiPartParser , ]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
