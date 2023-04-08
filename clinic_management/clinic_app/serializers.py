@@ -4,28 +4,27 @@ from .models import (
     Appointment, Schedule, ScheduleDetail
 
 )
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
+from django.contrib.auth.models import Group
 
-# - UserSerializer: Serializer for User Model
 class UserSerializer(serializers.ModelSerializer):
-
-    # override create of generic.CreateAPIView 
-    # set default role is ` paitient `
-    # use the ` set_password ` function to hash the password
     def create(self, validated_data):
         data = validated_data.copy()
-
         u = User(**data)
-        u.role = "paitent"
-        u.set_password(u.password)
+        u.password = make_password(u.password)
         u.save()
-
+        g = Group.objects.get(name = "Patient")
+        u.groups.add(g) 
         return u
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'username', 'password', 'email']
+        # fields = '__all__'
         extra_kwargs = {
+            'username' : {'read_only': True},
+            'avatar': {'write_only': True},
             'password': {'write_only': True}
         }
 
