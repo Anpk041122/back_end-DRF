@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinic_app.apps.ClinicAppConfig',
-    'oauth2_provider',
-    'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
+    'rest_framework',
     'drf_yasg',
+    'oauth2_provider',
 ]
 
 MEDIA_ROOT = '%s/clinic_app/static/' % BASE_DIR
@@ -134,6 +134,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'clinic_app.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -175,5 +176,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CLIENT_ID = '7KVAC6SE9ecpoCuZj7b3IqlLoxtgw7E6SsS3FqYP'
-CLIENT_SECRET = '3VNbxsTXG6HWlcgc2XeY5JZRs2uYE2XhySvPlCGCU2swFqVt9Bq8fqZSGvXFrDHrY1aMqF48G7TXjdJI3upzNTEKErgh7LkUp4dxK9bFzFIQl9bWvBMnqXFyxXJA06zV'
+
+CLIENT_ID = '6chmHdvcPN3xP9bkW9Vld88zaFiHAoVHGldlgmWv'
+CLIENT_SECRET = 'TYMX6CMv6lf9hL9MqoUXmz7mEvsrpiQjlLn6gIEnIcCgpwsT4XssoSnq5GCeqEvteHUH1mKBQhAoqG5glAW3f9RMhfaOVFLsKMi5MT5zqgbd897Pf0vC1mxrZ9lOKbH6'

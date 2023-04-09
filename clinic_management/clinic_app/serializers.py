@@ -1,7 +1,7 @@
 from .models import (
     Category, User, Medicine, Employee, 
     Patient, Order, OrderDetail, Position,
-    Appointment, Schedule, ScheduleDetail
+    Appointment, Schedule, ScheduleDetail, MedicalHistory
 
 )
 from django.contrib.auth.hashers import make_password
@@ -86,3 +86,8 @@ class ScheduleDetailSerializer(serializers.ModelSerializer):
     class Meta: 
         model = ScheduleDetail
         field = '__all__'
+# - MedicationSerializer : Serializer for Medication Model
+class MedicalHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicalHistory
+        field = ['symptoms', 'diagnosis', 'appointment', 'patient', 'doctor']
