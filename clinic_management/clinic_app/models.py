@@ -165,7 +165,7 @@ class OrderDetail(models.Model):
     quantity = models.IntegerField()
     dosage = models.CharField(max_length=100)
     instructions = models.TextField()
-    payment_method = models.CharField(max_length=100, default='')
+    payment_method = models.CharField(max_length=100, default='') 
     total_money = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
     class Meta:
