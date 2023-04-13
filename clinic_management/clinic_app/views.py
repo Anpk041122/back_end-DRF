@@ -1,5 +1,5 @@
-from .serializers import CategorySerializer, MedicineSerializer, UserSerializer, MedicalHistorySerializer
-from .models import Category, Medicine, User, MedicalHistory
+from .serializers import CategorySerializer, MedicineSerializer, UserSerializer, MedicalHistorySerializer, PatientSerializer
+from .models import Category, Medicine, User, MedicalHistory, Patient
 from rest_framework import ( 
     viewsets, generics, filters
     )
@@ -82,6 +82,22 @@ class UserViewSet(viewsets.ViewSet, generics.RetrieveUpdateDestroyAPIView, gener
         """
         return Response(UserSerializer(request.user).data)
 
+
+
+class PatientViewSet(generics.RetrieveUpdateAPIView, generics.ListAPIView):
+    queryset = Patient.objects.all()
+    serializer_class = PatientSerializer
+    parser_classes = [MultiPartParser, ]
+    renderer_classes = [JSONRenderer]
+    
+    def get_permissions(self):
+        if self.request.method in [ 'retrieve', 'update']:
+            if self.request.is_staff:
+                return [IsAdminUser()]
+            else:
+                return [perms.IsPatientUser()]
+        else:
+            return [IsAdminUser()]
     
 # search by user 
 class MedicineViewSet(viewsets.ViewSet , generics.ListAPIView):

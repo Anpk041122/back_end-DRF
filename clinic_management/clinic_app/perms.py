@@ -87,6 +87,7 @@ class IsDoctor(IsAuthenticated):
         if request.user.groups.filter(name = "Doctor").exists() and  request.user.is_doctor:
             return True
     
+    
 class IsNurse(IsAuthenticated):
     def has_permission(self, request, view):
         #   """
@@ -94,4 +95,3 @@ class IsNurse(IsAuthenticated):
         #   """   
         if request.user.groups.filter(name = "Nurse").exists() and request.user.is_nurse:
             return True
-    

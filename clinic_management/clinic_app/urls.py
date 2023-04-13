@@ -10,4 +10,5 @@ router.register('medicine', views.MedicineViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('patient/<int:id>/', views.PatientViewSet.as_view(), name="patient")
 ]

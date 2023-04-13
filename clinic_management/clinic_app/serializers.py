@@ -32,7 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PositionSerializer(serializers.ModelSerializer):  
     class Meta:
         model = Position
-        field = '__all__'
+        fields = '__all__'
 
 # - EmployeeSerializer: Serializer for Employee Model
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -45,7 +45,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
-        field = '__all__'
+        fields = '__all__'
 
 # - CategorySerializer: Serializer for Category Model
 class CategorySerializer(serializers.ModelSerializer):
@@ -69,25 +69,25 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDetail
-        field = '__all__'
+        fields = '__all__'
 
 # - AppointmentSerializer : Serializer for Appointment Model
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        field = '__all__'
+        fields = '__all__'
 # - ScheduleSerializer : Serializer for Schedule Model
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        field = '__all__'
+        fields = '__all__'
 # - ScheduleDetailSerializer : Serializer for ScheduleDetail Model
 class ScheduleDetailSerializer(serializers.ModelSerializer):
     class Meta: 
         model = ScheduleDetail
-        field = '__all__'
+        fields = '__all__'
 # - MedicationSerializer : Serializer for Medication Model
 class MedicalHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalHistory
-        field = ['symptoms', 'diagnosis', 'appointment', 'patient', 'doctor']
+        fields = ['symptoms', 'diagnosis', 'appointment', 'patient', 'doctor']
