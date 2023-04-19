@@ -8,12 +8,63 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.contrib.auth.models import Group
 
+class AdminUserSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        """
+        Create a new admin user from validated data.
+
+        Parameters:
+        -----------
+        validated_data: dict
+            The validated data to create the admin user from.
+
+        Returns:
+        --------
+        u: User
+            The newly created admin user.
+        """
+        data = validated_data.copy()
+        u = User(**data)    
+        u.password = make_password(u.password)
+        u.save()
+        if u.is_doctor:
+            g = Group.objects.get(name = "Doctor")
+        else:
+            g = Group.objects.get(name = "Nurse")
+            
+        u.groups.add(g) 
+        return u
+    
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password', 'email', 'is_doctor', 'is_nurse']
+        # fields = '__all__'
+        extra_kwargs = {
+            'avatar': {'write_only': True},
+            'password': {'write_only': True}
+        }
+
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
+        """
+        Create a new regular user from validated data.
+
+        Parameters:
+        -----------
+        validated_data: dict
+            The validated data to create the regular user from.
+
+        Returns:
+        --------
+        u: User
+            The newly created regular user.
+        """
         data = validated_data.copy()
         u = User(**data)
         u.password = make_password(u.password)
         u.save()
+        
+        
         g = Group.objects.get(name = "Patient")
         u.groups.add(g) 
         return u
@@ -21,9 +72,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'password', 'email']
-        # fields = '__all__'
         extra_kwargs = {
-            'username' : {'read_only': True},
             'avatar': {'write_only': True},
             'password': {'write_only': True}
         }
@@ -38,8 +87,7 @@ class PositionSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        field = '__all__'
-        exclude = ['user']
+        fields = '__all__'
         
 # - PatientSerializer: Serializer for Patient Model
 class PatientSerializer(serializers.ModelSerializer):
@@ -63,7 +111,7 @@ class MedicineSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        field = '__all__'
+        fields = '__all__'
 
 # - OrderDetailSerializer : Serializer for OrderDetail Model
 class OrderDetailSerializer(serializers.ModelSerializer):

@@ -131,6 +131,43 @@ class Medicine(BaseModel):
     image = models.ImageField(upload_to='static/%S', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+class Appointment(BaseModel):
+    """
+    Appointment model for medical appointments.
+
+    Fields:
+        patient (Patient): The patient who made the appointment.
+        employee (Employee): The employee who will attend the appointment.
+        date (datetime.date): The date of the appointment.
+        time (datetime.time): The time of the appointment.
+        shift (str): The shift of the appointment.
+        state (str): The state of the appointment.
+    """
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    date = models.DateField()
+    time = models.TimeField()
+    shift = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+
+
+class MedicalHistory(BaseModel):
+    """
+    MedicalHistory model for patients' medical histories.
+
+    Fields:
+        patient (User): The patient who has the medical history.
+        doctor (Employee): The doctor who performed the medical examination.
+        appointment (Appointment): The appointment where the medical examination was performed.
+        symptoms (str): The symptoms of the patient.
+        diagnosis (str): The diagnosis of the patient.
+        order (Order): The order related to the medical examination.
+    """
+    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='medical_histories')
+    doctor = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='medical_histories')
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='medical_histories')
+    symptoms = models.TextField(blank=True, null=True)
+    diagnosis = models.TextField(blank=True, null=True)
 
 class Order(BaseModel):
     """
@@ -144,7 +181,7 @@ class Order(BaseModel):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     medicines = models.ManyToManyField(Medicine, through='OrderDetail')
-
+    medical_history = models.ForeignKey(MedicalHistory, on_delete=models.CASCADE)
 
 
 class OrderDetail(models.Model):
@@ -173,26 +210,6 @@ class OrderDetail(models.Model):
             models.Index(fields=['order'])
         ]
 
-class Appointment(BaseModel):
-    """
-    Appointment model for medical appointments.
-
-    Fields:
-        patient (Patient): The patient who made the appointment.
-        employee (Employee): The employee who will attend the appointment.
-        date (datetime.date): The date of the appointment.
-        time (datetime.time): The time of the appointment.
-        shift (str): The shift of the appointment.
-        state (str): The state of the appointment.
-    """
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    date = models.DateField()
-    time = models.TimeField()
-    shift = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-
-
 class Schedule(BaseModel):
     """
     Schedule model for medical employees' schedules.
@@ -220,22 +237,3 @@ class ScheduleDetail(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
-
-class MedicalHistory(BaseModel):
-    """
-    MedicalHistory model for patients' medical histories.
-
-    Fields:
-        patient (User): The patient who has the medical history.
-        doctor (Employee): The doctor who performed the medical examination.
-        appointment (Appointment): The appointment where the medical examination was performed.
-        symptoms (str): The symptoms of the patient.
-        diagnosis (str): The diagnosis of the patient.
-        order (Order): The order related to the medical examination.
-    """
-    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='medical_histories')
-    doctor = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='medical_histories')
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='medical_histories')
-    symptoms = models.TextField(blank=True, null=True)
-    diagnosis = models.TextField(blank=True, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True, related_name='medical_histories')

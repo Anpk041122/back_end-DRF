@@ -129,8 +129,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'clinic_management_db',
         'USER': 'root',
-        'PASSWORD': '04112001',
-        'HOST': '' # mặc định localhost
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3360',
     }
 }
 
@@ -154,6 +155,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_MODEL_USER = 'clinic_app.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -177,5 +179,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CLIENT_ID = '6chmHdvcPN3xP9bkW9Vld88zaFiHAoVHGldlgmWv'
-CLIENT_SECRET = 'TYMX6CMv6lf9hL9MqoUXmz7mEvsrpiQjlLn6gIEnIcCgpwsT4XssoSnq5GCeqEvteHUH1mKBQhAoqG5glAW3f9RMhfaOVFLsKMi5MT5zqgbd897Pf0vC1mxrZ9lOKbH6'
+CLIENT_ID = '4dzkV4MQbSPf8C2KR1tfQc6ZxWtDu44mlxnXdYjJ'
+CLIENT_SECRET = 'ebQALwo7QQbuvXI9wdzkXK12lXBz3mmxGRB7E8UC8mFElv5HXAYcB9G6DpEMkFcikxpD4wj2Jt4p1VI2hcvxC9G5NtfckqHeCobcpFpSMYX7nLU2OLvNkfB9feaUUqIb'
