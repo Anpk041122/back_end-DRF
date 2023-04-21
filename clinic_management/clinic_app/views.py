@@ -450,7 +450,7 @@ class ScheduleDetailViewSet(viewsets.ModelViewSet):
         return [perms.IsScheduleDetail()]
     
 # search by user 
-class MedicineViewSet(viewsets.ViewSet , generics.ListAPIView):
+class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
     """
     Viewset for retrieving and filtering medicines.
 
