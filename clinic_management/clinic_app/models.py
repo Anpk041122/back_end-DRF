@@ -110,7 +110,6 @@ class Category(models.Model):
         description (str, optional): The description of the category.
     """
     category_name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
     
 class Medicine(BaseModel):
     """
@@ -127,8 +126,8 @@ class Medicine(BaseModel):
     medicine_name = models.CharField(max_length=100)
     manufacturer = models.CharField(max_length=100)
     description = models.TextField()
-    unit_price = models.DecimalField(max_digits=7, decimal_places=2)
-    image = models.ImageField(upload_to='static/%S', null=True)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='static/medicine/', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 class Appointment(BaseModel):
