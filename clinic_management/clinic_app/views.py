@@ -26,7 +26,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from . import perms
 from django.contrib.auth.hashers import make_password
-
+from .paginators import MedicinePaginator
 # User : manage account of empolyee and paitent
 class UserViewSet(viewsets.ViewSet, generics.RetrieveUpdateDestroyAPIView, generics.ListCreateAPIView):
     """
@@ -94,9 +94,10 @@ class UserViewSet(viewsets.ViewSet, generics.RetrieveUpdateDestroyAPIView, gener
         Returns:
             Response: A response object.
         """
+        print(request.user)
         return Response(UserSerializer(request.user).data)
 
-class AdminUserViewSet(generics.CreateAPIView):
+class AdminUserViewSet(generics.CreateAPIView, viewsets.ViewSet):
     """
     Viewset for creating admin users.
 
@@ -137,6 +138,19 @@ class AdminUserViewSet(generics.CreateAPIView):
         """
         if self.request.method == "POST":
             return [IsAdminUser()]
+    @action(methods=['get'], detail=False, url_path='current-user')
+    def current_user(self, request):
+        """
+        Get the current user instance.
+
+        Args:
+            request (HttpRequest): The request instance.
+
+        Returns:
+            Response: A response object.
+        """
+        print(request.user)
+        return Response(UserSerializer(request.user).data)
         
 class PatientViewSet(generics.RetrieveUpdateAPIView, generics.ListAPIView):
     """
@@ -472,6 +486,7 @@ class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
     """
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
+    pagination_class = MedicinePaginator
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     

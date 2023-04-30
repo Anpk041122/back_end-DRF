@@ -32,7 +32,7 @@ class User(AbstractUser):
         - is_doctor: A BooleanField that indicates whether the user is a doctor or not.
         - is_nurse: A BooleanField that indicates whether the user is a nurse or not.
     """
-    avatar = models.ImageField(upload_to='users/%Y/%m/', null=True)
+    avatar = models.ImageField(upload_to='static/users/%Y/%m/', null=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
@@ -99,8 +99,7 @@ class Patient(BaseModel):
     # avatar = models.ImageField(upload_to='static/patient', null=True)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=10)
-    medical_history = RichTextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 class Category(models.Model):
     """
@@ -142,12 +141,18 @@ class Appointment(BaseModel):
         shift (str): The shift of the appointment.
         state (str): The state of the appointment.
     """
+    STATUS_CHOICES = [
+        ('Load', 'Đang chờ xác nhận'),
+        ('Confirm', 'Xác nhận'),
+        ('Done', 'Hoàn thành'),
+        ('Cancel', 'Đã hủy'),
+    ]
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
-    shift = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
+    shift = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Load')
+    state = models.BooleanField(default=False)
 
 
 class MedicalHistory(BaseModel):
