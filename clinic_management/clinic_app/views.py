@@ -185,13 +185,28 @@ class PatientViewSet(viewsets.ModelViewSet):
         """
         if self.request.method in [ 'GET', 'PUT']:
             user = User.objects.get(id = self.request.auth.user_id)
-            print("\n user : {}".format(user))
             if user.is_staff:
                 return [IsAdminUser(), IsAuthenticated()]
             else:
                 return [perms.IsCustomerPatient()]
         else:
             return [IsAdminUser()]
+        
+    def filter_queryset(self, queryset):
+        """
+        Filters the queryset based on the query parameters.
+
+        Args:
+            queryset (QuerySet): The queryset to filter.
+
+        Returns:
+            The filtered queryset.
+        """
+        kw = self.request.query_params.get('kw')
+        if kw:
+            queryset = queryset.filter(patient_name__icontains=kw)
+            
+        return queryset
     
 class EmployeeViewSet(viewsets.ModelViewSet):
     """
@@ -281,7 +296,7 @@ class MedicalHistoryViewSet(viewsets.ModelViewSet):
 
         if patient_name:
             # Filter MedicalHistory by patient name
-            queryset = queryset.filter(patient__name__icontains=patient_name)
+            queryset = queryset.filter(patient_name__icontains=patient_name)
 
         if patient_id:
             # Filter MedicalHistory by patient ID
