@@ -486,9 +486,9 @@ class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
     """
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
+    renderer_classes = [JSONRenderer]       
+    parser_classes = [MultiPartParser , ]
     pagination_class = MedicinePaginator
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
     
     def get_permissions(self):
         """
@@ -510,13 +510,12 @@ class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
             The filtered queryset.
         """
         kw = self.request.query_params.get('kw')
-        if self.action.__eq__('list') and kw:
-            queryset = queryset.filter(name__icontains=kw)
+        if kw:
+            queryset = queryset.filter(medicine_name__icontains=kw)
 
         cate_id = self.request.query_params.get('category_id')
         if cate_id:
             queryset = queryset.filter(category_id=cate_id)
-
         return queryset
 
 
