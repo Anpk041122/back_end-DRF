@@ -15,8 +15,8 @@ router.register('order_detail', views.OrderDetailViewSet)
 router.register('schedule', views.ScheduleViewSet)
 router.register('schedule_detail', views.ScheduleDetailViewSet)
 router.register('admin_user', views.AdminUserViewSet)
+router.register('patient', views.PatientViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('patient/<int:id>/', views.PatientViewSet.as_view(), name="patient"),
 ]

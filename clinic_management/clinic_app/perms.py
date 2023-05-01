@@ -64,7 +64,9 @@ class IsPatientUser(IsAuthenticated):
             bool: True if the requesting user belongs to a group with appropriate permissions,
                   False otherwise.
         """
-        group = request.user.groups.first()
+        user = User.objects.get(id = request.auth.user_id)
+        
+        group = user.groups.first()
         
         content_type = ContentType.objects.get_for_model(User)
         
@@ -98,14 +100,24 @@ class IsCustomerPatient(IsAuthenticated):
             bool: True if the requesting user belongs to a group with appropriate permissions for patient,
                   False otherwise.
         """
-        group = request.user.groups.first()
+        codenames = {
+            'POST' : 'add_patient',
+            'GET' : 'view_patient',
+            'DELETE' : 'delete_patient',
+            'PATCH' : 'change_patient'
+        }
+         
+        user = User.objects.get(pk=request.auth.user_id)
+        
+        group = user.groups.first()
         
         content_type = ContentType.objects.get_for_model(Patient)
         
-        if request.method == 'GET':
-            return group.permissions.filter(content_type=content_type, codename ='view_patient').exists()       
-        else : 
-            return group.permissions.filter(content_type=content_type, codename ='change_patient').exists() 
+        if user.is_staff:
+            return [IsAdminUser()]
+        
+        return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
+    
 
 class IsEmployee(IsAuthenticated):
     """
@@ -313,12 +325,9 @@ class IsOrder(IsAuthenticated):
         
         if user.is_staff:
             return [IsAdminUser()]
-        elif user.is_nurse:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-        elif user.is_doctor:
+        else:
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
     
-        return [IsAuthenticated()]
     
 class IsOrderDetail(IsAuthenticated):  
     """
@@ -365,12 +374,9 @@ class IsOrderDetail(IsAuthenticated):
         
         if user.is_staff:
             return [IsAdminUser()]
-        elif user.is_nurse:
+        else:  
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-        elif user.is_doctor:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-    
-        return [IsAuthenticated()]
+
     
 class IsSchedule(IsOrder):  
     """
@@ -417,12 +423,9 @@ class IsSchedule(IsOrder):
         
         if user.is_staff:
             return [IsAdminUser()]
-        elif user.is_nurse:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-        elif user.is_doctor:
+        else:
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
     
-        return [IsAuthenticated()]
     
 class IsScheduleDetail(IsAuthenticated):  
     """
@@ -469,12 +472,8 @@ class IsScheduleDetail(IsAuthenticated):
         
         if user.is_staff:
             return [IsAdminUser()]
-        elif user.is_nurse:
+        else:
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-        elif user.is_doctor:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-    
-        return [IsAuthenticated()]
     
 class IsMedecine(IsAuthenticated):
     """
@@ -521,12 +520,9 @@ class IsMedecine(IsAuthenticated):
         
         if user.is_staff:
             return [IsAdminUser()]
-        elif user.is_nurse:
+        else:
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-        elif user.is_doctor:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-    
-        return False
+
     
 class IsCategory(IsAuthenticated):
     """
@@ -573,9 +569,5 @@ class IsCategory(IsAuthenticated):
         
         if user.is_staff:
             return [IsAdminUser()]
-        elif user.is_nurse:
+        else:
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-        elif user.is_doctor:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
-    
-        return False

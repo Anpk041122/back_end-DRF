@@ -152,7 +152,7 @@ class AdminUserViewSet(generics.CreateAPIView, viewsets.ViewSet):
         print(request.user)
         return Response(UserSerializer(request.user).data)
         
-class PatientViewSet(generics.RetrieveUpdateAPIView, generics.ListAPIView):
+class PatientViewSet(viewsets.ModelViewSet):
     """
     A viewset that provides GET and PUT methods for retrieving and updating patient records,
     and GET method for listing patient records.
@@ -183,8 +183,10 @@ class PatientViewSet(generics.RetrieveUpdateAPIView, generics.ListAPIView):
         Returns:
             list of Permission classes: The list of permission classes to apply.
         """
-        if self.request.method in [ 'retrieve', 'update']:
-            if self.request.user.is_staff:
+        if self.request.method in [ 'GET', 'PUT']:
+            user = User.objects.get(id = self.request.auth.user_id)
+            print("\n user : {}".format(user))
+            if user.is_staff:
                 return [IsAdminUser(), IsAuthenticated()]
             else:
                 return [perms.IsCustomerPatient()]
