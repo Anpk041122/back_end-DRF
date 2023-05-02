@@ -535,7 +535,20 @@ class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
             queryset = queryset.filter(category_id=cate_id)
         return queryset
 
-
+class ListAllMedicineViewSet(generics.ListAPIView):
+    queryset = Medicine.objects.all()
+    serializer_class = MedicineSerializer
+    renderer_classes = [JSONRenderer]       
+    parser_classes = [MultiPartParser , ]
+    def get_permissions(self):
+        """
+        Returns the permission classes that this view requires.
+        
+        Permissions:
+            Medicine: Allows access to authenticated users who have the 'Medicine' permission.
+        """
+        return [perms.IsMedecine()]
+    
 # get all use by admin
 class CategoryViewSet(viewsets.ModelViewSet):
     """
