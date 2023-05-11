@@ -12,7 +12,6 @@ from .models import (
     Employee, Appointment, Schedule,
     ScheduleDetail, Order, OrderDetail,
     
-    
 )
 from rest_framework import ( 
     viewsets, generics, filters
@@ -27,6 +26,9 @@ from rest_framework.response import Response
 from . import perms
 from django.contrib.auth.hashers import make_password
 from .paginators import MedicinePaginator
+from rest_framework import status
+from django.http import Http404
+
 # User : manage account of empolyee and paitent
 class UserViewSet(viewsets.ViewSet, generics.RetrieveUpdateDestroyAPIView, generics.ListCreateAPIView):
     """
@@ -97,7 +99,7 @@ class UserViewSet(viewsets.ViewSet, generics.RetrieveUpdateDestroyAPIView, gener
         print(request.user)
         return Response(UserSerializer(request.user).data)
 
-class AdminUserViewSet(generics.CreateAPIView, viewsets.ViewSet):
+class AdminUserViewSet(viewsets.ModelViewSet):
     """
     Viewset for creating admin users.
 
@@ -114,45 +116,35 @@ class AdminUserViewSet(generics.CreateAPIView, viewsets.ViewSet):
         parser_classes (list): The parser classes that this view can handle.
         renderer_classes (list): The renderer classes that this view can use.
     """
-    queryset = User.objects.filter(is_active=True)
-    serializer_class = AdminUserSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     parser_classes = [MultiPartParser, ]
     renderer_classes = [JSONRenderer]
     
     def get_permissions(self):
-        """
-        Viewset for creating admin users.
+        return [IsAdminUser()]
+    
+    # @action(methods=['get'], detail=False, url_path='check-user')
+    # def current_patient(self, request):
+    #     """
+    #     Get the current user instance.
 
-        Extends:
-            generics.CreateAPIView
+    #     Args:
+    #         request (HttpRequest): The request instance.
 
-        Methods:
-            get_permissions():
-                Returns the permission classes that this view requires.
+    #     Returns:
+    #         Response: A response object.
+    #     """
+    #     user = User.objects.get(username= self.kwargs['username'])
+    
+    #     if user:
+    #         return Response(UserSerializer(user).data)
+    #     else:
+    #         return Response({'error': 'No patient found for this user.'}, status=status.HTTP_204_NO_CONTENT)
+    
 
-        Attributes:
-            queryset (QuerySet): The default queryset for this viewset.
-            serializer_class (Serializer): The serializer class for this viewset.
-            parser_classes (list): The parser classes that this view can handle.
-            renderer_classes (list): The renderer classes that this view can use.
-        """
-        if self.request.method == "POST":
-            return [IsAdminUser()]
-    @action(methods=['get'], detail=False, url_path='current-user')
-    def current_user(self, request):
-        """
-        Get the current user instance.
-
-        Args:
-            request (HttpRequest): The request instance.
-
-        Returns:
-            Response: A response object.
-        """
-        print(request.user)
-        return Response(UserSerializer(request.user).data)
         
-class PatientViewSet(viewsets.ModelViewSet):
+class PatientViewSet(viewsets.ModelViewSet, viewsets.ViewSet):
     """
     A viewset that provides GET and PUT methods for retrieving and updating patient records,
     and GET method for listing patient records.
@@ -183,10 +175,10 @@ class PatientViewSet(viewsets.ModelViewSet):
         Returns:
             list of Permission classes: The list of permission classes to apply.
         """
-        if self.request.method in [ 'GET', 'PUT']:
+        if self.request.method in [ 'GET', 'PUT', 'POST', 'current-patient']:
             user = User.objects.get(id = self.request.auth.user_id)
             if user.is_staff:
-                return [IsAdminUser(), IsAuthenticated()]
+                return [IsAdminUser()]
             else:
                 return [perms.IsCustomerPatient()]
         else:
@@ -207,6 +199,26 @@ class PatientViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(patient_name__icontains=kw)
             
         return queryset
+    
+    @action(methods=['get'], detail=False, url_path='current-patient')
+    def current_patient(self, request):
+        """
+        Get the current user instance.
+
+        Args:
+            request (HttpRequest): The request instance.
+
+        Returns:
+            Response: A response object.
+        """
+        user_id = self.request.auth.user_id
+    
+        try:
+            patient = Patient.objects.get(user_id=user_id)
+        except Patient.DoesNotExist:
+            return Response({'error': 'No patient found for this user.'}, status=status.HTTP_204_NO_CONTENT)
+        
+        return Response(PatientSerializer(patient).data)
     
 class EmployeeViewSet(viewsets.ModelViewSet):
     """
@@ -240,8 +252,6 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         Returns:
             list: A list of permission classes.
         """
-        if self.action in [ 'list']:
-            return [perms.IsEmployee()]
         return [IsAdminUser()]
     
 
@@ -514,7 +524,9 @@ class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
         Permissions:
             Medicine: Allows access to authenticated users who have the 'Medicine' permission.
         """
-        return [perms.IsMedecine()]
+        if self.request.method in ['GET']:
+            return [perms.IsMedecine()]
+        return [IsAdminUser()]
     
     def filter_queryset(self, queryset):
         """
@@ -535,19 +547,12 @@ class MedicineViewSet(viewsets.ViewSet , viewsets.ModelViewSet):
             queryset = queryset.filter(category_id=cate_id)
         return queryset
 
-class ListAllMedicineViewSet(generics.ListAPIView):
+class ListAllMedicineViewSet(viewsets.ModelViewSet):
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
     renderer_classes = [JSONRenderer]       
     parser_classes = [MultiPartParser , ]
-    def get_permissions(self):
-        """
-        Returns the permission classes that this view requires.
-        
-        Permissions:
-            Medicine: Allows access to authenticated users who have the 'Medicine' permission.
-        """
-        return [perms.IsMedecine()]
+    permissions_class =  [perms.IsMedecine()]
     
 # get all use by admin
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -579,4 +584,4 @@ class CategoryViewSet(viewsets.ModelViewSet):
         Permissions:
             Category: Allows access to authenticated users who have the 'Category' permission.
         """
-        return [perms.IsCategory()]
+        return [IsAdminUser()]

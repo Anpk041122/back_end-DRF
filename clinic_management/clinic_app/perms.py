@@ -113,6 +113,8 @@ class IsCustomerPatient(IsAuthenticated):
         
         content_type = ContentType.objects.get_for_model(Patient)
         
+        
+        print('Per : {}'.format(group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()))
         if user.is_staff:
             return [IsAdminUser()]
         
@@ -524,50 +526,3 @@ class IsMedecine(IsAuthenticated):
             return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()
 
     
-class IsCategory(IsAuthenticated):
-    """
-    Permission class that allows access only if the requesting user is authenticated
-    and has the appropriate permissions to view, add, change, or delete categories.
-
-    Extends:
-        IsAuthenticated
-
-    Methods:
-        has_permission(request, view):
-            Check if the requesting user is authenticated and has the appropriate permissions
-            to view, add, change, or delete categories.
-
-    Attributes:
-        None.
-    """
-
-    def has_permission(self, request, view):
-        """
-        Check if the requesting user is authenticated and has the appropriate permissions
-        to view, add, change, or delete categories.
-
-        Args:
-            request (HttpRequest): The HTTP request instance.
-            view (django.views.View): The view instance.
-
-        Returns:
-            bool: True if the requesting user is authenticated and has the appropriate permissions
-                  to view, add, change, or delete categories, False otherwise.
-        """
-        codenames = {
-            'POST' : 'add_category',
-            'GET' : 'view_category',
-            'DELETE' : 'delete_category',
-            'PATCH' : 'change_category'
-        }
-         
-        user = User.objects.get(pk=request.auth.user_id)
-        
-        group = user.groups.first()
-        
-        content_type = ContentType.objects.get_for_model(Category)
-        
-        if user.is_staff:
-            return [IsAdminUser()]
-        else:
-            return group.permissions.filter(content_type=content_type, codename = codenames[request.method]).exists()

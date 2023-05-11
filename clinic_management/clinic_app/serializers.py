@@ -1,6 +1,6 @@
 from .models import (
     Category, User, Medicine, Employee, 
-    Patient, Order, OrderDetail, Position,
+    Patient, Order, OrderDetail, 
     Appointment, Schedule, ScheduleDetail, MedicalHistory
 
 )
@@ -77,11 +77,6 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-# - PositionSerializer: Serializer for Position Model
-class PositionSerializer(serializers.ModelSerializer):  
-    class Meta:
-        model = Position
-        fields = '__all__'
 
 # - EmployeeSerializer: Serializer for Employee Model
 class EmployeeSerializer(serializers.ModelSerializer):

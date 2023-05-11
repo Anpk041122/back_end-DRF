@@ -38,17 +38,6 @@ class User(AbstractUser):
     is_doctor = models.BooleanField(default=False)
     is_nurse = models.BooleanField(default=False)
 
-class Position(models.Model):
-    """
-    A model class that represents a position of an employee.
-
-    Fields:
-        - position_name: A CharField that represents the name of the position.
-        - description: A TextField that represents the description of the position.
-    """
-    position_name = models.CharField(max_length=100)
-    description = models.TextField()
-
 class Employee(BaseModel):
     """
     A model class that represents an employee of the hospital.
@@ -74,7 +63,7 @@ class Employee(BaseModel):
     gender = models.CharField(max_length=10)
     specialization = models.CharField(max_length=100)
     experience = models.CharField(max_length=100)
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    role = models.CharField(max_length=100, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -126,7 +115,7 @@ class Medicine(BaseModel):
     manufacturer = models.CharField(max_length=100)
     description = models.TextField()
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='static/medicine/', null=True)
+    image = models.ImageField(upload_to='medicine/', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 class Appointment(BaseModel):
@@ -148,7 +137,6 @@ class Appointment(BaseModel):
         ('Cancel', 'Đã hủy'),
     ]
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     shift = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Load')
